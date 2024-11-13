@@ -10,7 +10,7 @@ const commentSchema = new mongoose.Schema({
     ref: "Post",
     required: true,
   },
-  comment: {
+  description: {
     type: String,
     required: true,
   },

@@ -1,7 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import "./login.scss";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { loginApi } from "../../services/loginApi";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/Slicer/authSlicer";
 function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [details, setdetails] = useState({
+    email: "",
+    password: "",
+  });
+  const mutation = useMutation({
+    mutationFn: loginApi,
+    mutationKey: ["login"],
+  });
+
+  const handleChange = (e) => {
+    // console.log(e.target.value);
+    e.preventDefault();
+
+    setdetails((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+    console.log(details);
+  };
+  const handleSubmit = (e) => {
+    console.log(e);
+    e.preventDefault();
+    mutation
+      .mutateAsync(details)
+      .then((data) => {
+        console.log(data);
+        dispatch(login(data));
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        navigate("/home");
+      })
+      .catch((e) => {
+        console.log(e.response.data.message);
+      });
+  };
+
   return (
     <div className="login">
       <div className="card">
@@ -18,13 +59,33 @@ function Login() {
             <button>Sign Up</button>
           </Link>
         </div>
+
         <div className="right">
-          <h1>Login</h1>
-          <form>
-            <input type="text" placeholder="Username" />
-            <input type="password" placeholder="Password" />
-            <button>Submit</button>
-          </form>
+          <div>
+            <h1>Login</h1>
+            {mutation.isError && <p>{mutation.error.response.data.message}</p>}
+            {mutation.isSuccess && <p>Successfully Logged in</p>}
+            {mutation.isLoading && <p>Loading....</p>}
+            <form>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={details.email}
+                onChange={handleChange}
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={details.password}
+                onChange={handleChange}
+              />
+              <button type="submit" onClick={handleSubmit}>
+                Submit
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

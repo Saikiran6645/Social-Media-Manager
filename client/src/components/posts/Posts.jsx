@@ -1,33 +1,28 @@
-import React from 'react'
-import Post from '../post/Post';
+import React from "react";
+import Post from "../post/Post";
+import CreatePost from "./createPost";
+import { useQuery } from "@tanstack/react-query";
+import { getPostApi } from "../../services/postApi";
 
-function Posts() {
-    const posts = [
-        {
-          id: 1,
-          name: "John Doe",
-          userId: 1,
-          profilePic:
-            "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-          desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-          img: "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600",
-        },
-        {
-          id: 2,
-          name: "Jane Doe",
-          userId: 2,
-          profilePic:
-            "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-          desc: "Tenetur iste voluptates dolorem rem commodi voluptate pariatur, voluptatum, laboriosam consequatur enim nostrum cumque! Maiores a nam non adipisci minima modi tempore.",
-        },
-      ];
+const Posts = () => {
+  const { data, refetch, isFetched, isLoading } = useQuery({
+    queryFn: getPostApi,
+    queryKey: ["posts"],
+  });
+  console.log(data);
+
   return (
-    <div>
-        {posts.map((post)=>{
-            return <Post key={post.id} post={post}/>
-        })}
-    </div>
-  )
-}
+    <>
+      <CreatePost />
+      <div>
+        {isLoading ? <h1>Loading...</h1> : <h1>Posts</h1>}
+        {isFetched &&
+          data.map((post) => {
+            return <Post key={post.id} post={post} />;
+          })}
+      </div>
+    </>
+  );
+};
 
-export default Posts
+export default Posts;

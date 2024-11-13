@@ -8,8 +8,18 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import "./navbar.scss";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/Slicer/authSlicer";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const dispatch = useDispatch(); 
+  const navigate = useNavigate();
+  const handleClick = () => {
+    dispatch(logout());
+    localStorage.clear();
+    navigate("/login");
+  };
   return (
     <div className="navbar">
       <div className="left" style={{ display: "flex" }}>
@@ -30,6 +40,7 @@ const Navbar = () => {
         <div className="user">
           <img src="" alt="" />
           <span>Username</span>
+          <button onClick={handleClick}>logout</button>
         </div>
       </div>
     </div>

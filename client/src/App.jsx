@@ -6,6 +6,7 @@ import Leftbar from "./components/leftbar/Leftbar";
 import Home from "./pages/home/Home";
 import RightBar from "./components/RightBar/RightBar";
 import "./styles.scss";
+import CreatePost from "./components/posts/createPost";
 const Layout = () => {
   return (
     <div className="dark-theme">
@@ -24,10 +25,11 @@ const Layout = () => {
 function App() {
   return (
     <BrowserRouter>
-      <Layout />
       <Routes>
+        <Route path="/home" element={<Layout />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        {/* <Route path="/createpost" element={<CreatePost />} /> */}
       </Routes>
     </BrowserRouter>
   );
