@@ -6,7 +6,7 @@ const postController = {
     res.status(200).json(posts);
   },
   createPost: async (req, res) => {
-    const { desc, img } = req.body;
+    const { desc, img, username } = req.body;
     const userId = req.user;
 
     if (!userId || !desc || !img) {
@@ -17,6 +17,7 @@ const postController = {
       userId,
       desc,
       img,
+      username,
     });
     await post.save();
     res.status(201).json(post);

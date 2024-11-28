@@ -1,9 +1,9 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import "./register.scss";
 import { Link, useNavigate } from "react-router-dom";
+import "./register.scss";
 import { registerApi } from "../../services/loginApi";
+
 function Register() {
   const navigate = useNavigate();
   const [details, setdetails] = useState({
@@ -11,19 +11,37 @@ function Register() {
     password: "",
     username: "",
     name: "",
+    profilePic: "",
+    coverPic: "",
   });
+
   const mutation = useMutation({
     mutationFn: registerApi,
     mutationKey: ["register"],
   });
-  const handleChange = (e) => {
-    // console.log(e.target.value);
-    e.preventDefault();
-    setdetails((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-    console.log(details);
+
+  // Convert image file to base64
+  const handleImageUpload = (e, fieldName) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setdetails((prev) => ({
+          ...prev,
+          [fieldName]: reader.result, // Base64 string
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
+
+  const handleChange = (e) => {
+    setdetails((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     mutation
@@ -33,9 +51,10 @@ function Register() {
         navigate("/login");
       })
       .catch((e) => {
-        console.log(e.response.data.message);
+        console.error(e.response?.data?.message || "An error occurred");
       });
   };
+
   return (
     <div className="register">
       <div className="card">
@@ -70,16 +89,20 @@ function Register() {
               value={details.name}
               onChange={handleChange}
             />
-
             <div>
               <label>PROFILE PICTURE</label>
-              <input type="file" placeholder="Profile Picture" />
+              <input
+                type="file"
+                onChange={(e) => handleImageUpload(e, "profilePic")}
+              />
             </div>
             <div>
               <label>COVER PICTURE</label>
-              <input type="file" placeholder="Cover Picture" />
+              <input
+                type="file"
+                onChange={(e) => handleImageUpload(e, "coverPic")}
+              />
             </div>
-
             <button type="submit">Submit</button>
           </form>
         </div>
@@ -91,7 +114,7 @@ function Register() {
             sit numquam consequuntur aliquid eum fugiat voluptatibus esse,
             corrupti, incidunt repudiandae delectus earum.
           </p>
-          <span>Dont you have an Account</span>
+          <span>Don't you have an Account?</span>
           <Link to="/login">
             <button>Login</button>
           </Link>

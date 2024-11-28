@@ -1,6 +1,6 @@
 // import React, { useState } from "react";
 import { postApi } from "../../services/postApi"; // Ensure this is correctly set up
-// import { useMutation } from "@tanstack/react-query";
+// import { useMutation } from "@tanstack/react-query";~
 import { useSelector } from "react-redux";
 import imageCompression from "browser-image-compression"; // Import image compression library
 import { useState } from "react";
@@ -17,11 +17,13 @@ const CreatePost = () => {
   const [uploaing, setuploading] = useState(false);
   const queryClient = useQueryClient();
   const id = useSelector((state) => state.auth.user.id);
+  const username = useSelector((state) => state.auth.user.username);
 
   const mutate = useMutation({
     mutationFn: postApi,
     mutationKey: ["createPost"],
     onError: (error) => {
+      
       console.error("Error submitting post:", error);
       setErrorMessage("Failed to submit post. Please try again.");
     },
@@ -80,7 +82,7 @@ const CreatePost = () => {
       return;
     }
 
-    const data = { img: base64String, desc: description, id };
+    const data = { img: base64String, desc: description, id,username };
 
     setIsLoading(true); // Start loading
 

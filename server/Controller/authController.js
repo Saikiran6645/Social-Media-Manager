@@ -46,7 +46,9 @@ const authController = {
       expiresIn: "5h",
     });
     const id = user._id;
+    const username = user.username;
     res.status(200).json({
+      username,
       token,
       id,
       message: "User logged in",
@@ -55,6 +57,13 @@ const authController = {
   profile: asyncHandler(async (req, res) => {
     // const user = await userSchema.findById(req.user).select("-password");
     res.status(200).json({ message: "User profile" });
+  }),
+  user: asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    const user = await userSchema.findOne({ _id: id });
+    console.log(user);
+    res.json(user);
   }),
 };
 module.exports = { authController };

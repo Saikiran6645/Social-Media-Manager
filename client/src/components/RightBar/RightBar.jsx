@@ -203,3 +203,11 @@ const RightBar = () => {
 };
 
 export default RightBar;
+// import React from "react";
+// import CreatePost from "../posts/createPost";
+
+// const RightBar = () => {
+//   return <div>{/* <CreatePost onPostCreated={refetch} /> */}</div>;
+// };
+
+// export default RightBar;

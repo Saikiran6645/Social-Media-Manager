@@ -3,22 +3,23 @@ const token = JSON.parse(localStorage.getItem("userInfo") || null);
 export const getPostApi = async () => {
   const response = await axios.get("http://localhost:3000/api/posts/get", {
     headers: {
-      Authorization: `Bearer ${token.token}`,
+      authorization: `Bearer ${token.token}`,
     },
   });
   return response.data;
 };
-export const postApi = async ({ desc, img, id }) => {
+export const postApi = async ({ desc, img, id, username }) => {
   const response = await axios.post(
     "http://localhost:3000/api/posts/create",
     {
+      username,
       desc,
       img,
       userId: id,
     },
     {
       headers: {
-        Authorization: `Bearer ${token.token}`,
+        authorization: `Bearer ${token.token}`,
       },
     }
   );

@@ -6,6 +6,7 @@ const cors = require("cors");
 const { AuthRoute } = require("./Routes/auth");
 const { errorHandler } = require("./Middleware/ErrorHandler");
 const { postRoutes } = require("./Routes/post");
+const { storyRoutes } = require("./Routes/stories");
 app.use(cors());
 app.use(express.json({ extended: true, limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -15,6 +16,7 @@ app.use("/api/auth/", AuthRoute);
 // app.use("/api/commnents/", commentRoutes);
 // app.use("/api/likes/", likesRoutes);
 app.use("/api/posts/", postRoutes);
+app.use("/api/story/", storyRoutes);
 const connectDB = async () => {
   try {
     await mongoose.connect("mongodb://localhost:27017/socialMedia");
